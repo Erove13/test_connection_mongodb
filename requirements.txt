@@ -2,4 +2,3 @@ pymongo
 streamlit
 python-dotenv
 pandas
-dotenv
