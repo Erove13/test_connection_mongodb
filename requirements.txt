@@ -1,6 +1,4 @@
-streamlit
-pandas
-config
 pymongo
-dotenv
-os
+streamlit
+python-dotenv
+pandas
