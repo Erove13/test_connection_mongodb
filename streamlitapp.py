@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from conf import collection  # Importamos solo la colección
+from config import collection  # Importamos solo la colección
 
 # Función para obtener los datos
 def get_data():
