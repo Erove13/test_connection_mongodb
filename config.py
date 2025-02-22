@@ -10,6 +10,11 @@ MONGO_URI = os.getenv("MONGO_URI")
 MONGO_DB = os.getenv("MONGO_DB")
 MONGO_COLLECTION = os.getenv("MONGO_COLLECTION")
 
+# Verifica si las variables de entorno están cargadas correctamente
+print(f'MONGO_URI: {os.getenv("MONGO_URI")}')
+print(f'MONGO_DB: {os.getenv("MONGO_DB")}')
+print(f'MONGO_COLLECTION: {os.getenv("MONGO_COLLECTION")}')
+
 # Verificar que las variables no están vacías
 if not MONGO_URI or not MONGO_DB or not MONGO_COLLECTION:
     raise ValueError("Faltan algunas variables de entorno en el archivo .env")
@@ -24,8 +29,3 @@ client = MongoClient(MONGO_URI)
 # Acceder a la base de datos y colección
 db = client[MONGO_DB]  # Esto debe ser una cadena (str)
 collection = db[MONGO_COLLECTION]
-
-
-print(f"MONGO_URI: {MONGO_URI}")
-print(f"MONGO_DB: {MONGO_DB}")
-print(f"MONGO_COLLECTION: {MONGO_COLLECTION}")
