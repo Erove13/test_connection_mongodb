@@ -14,3 +14,7 @@ MONGO_COLLECTION = os.getenv("MONGO_COLLECTION")
 client = MongoClient(MONGO_URI)
 db = client[MONGO_DB]
 collection = db[MONGO_COLLECTION]
+
+print(f"MONGO_URI: {MONGO_URI}")
+print(f"MONGO_DB: {MONGO_DB}")
+print(f"MONGO_COLLECTION: {MONGO_COLLECTION}")
