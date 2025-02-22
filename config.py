@@ -24,3 +24,8 @@ client = MongoClient(MONGO_URI)
 # Acceder a la base de datos y colección
 db = client[MONGO_DB]  # Esto debe ser una cadena (str)
 collection = db[MONGO_COLLECTION]
+
+
+print(f"MONGO_URI: {MONGO_URI}")
+print(f"MONGO_DB: {MONGO_DB}")
+print(f"MONGO_COLLECTION: {MONGO_COLLECTION}")
