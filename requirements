@@ -1,3 +1,6 @@
 streamlit
 pandas
 config
+pymongo
+dotenv
+os
