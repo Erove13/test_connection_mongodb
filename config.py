@@ -1,37 +1,13 @@
-import os
-from dotenv import load_dotenv
 from pymongo import MongoClient
 
-# Cargar las variables de entorno
-load_dotenv()
+# Datos de conexión directamente en el archivo config.py
+MONGO_URI = "mongodb+srv://erove:ironbrick@cluster0.b1drs.mongodb.net/?retryWrites=true&w=majority"
+MONGO_DB = "Ironbrick"
+MONGO_COLLECTION = "Lego_colab"
 
-# Obtener las variables de entorno
-MONGO_URI = os.getenv("MONGO_URI")
-MONGO_DB = os.getenv("MONGO_DB")
-MONGO_COLLECTION = os.getenv("MONGO_COLLECTION")
+# Crear conexión a MongoDB
+client = MongoClient(MONGO_URI)
 
-# Verifica si las variables se cargan correctamente
-print(f"MONGO_URI: {MONGO_URI}")
-print(f"MONGO_DB: {MONGO_DB}")
-print(f"MONGO_COLLECTION: {MONGO_COLLECTION}")
-
-# Verifica que las variables no estén vacías
-if not MONGO_URI or not MONGO_DB or not MONGO_COLLECTION:
-    raise ValueError("Faltan algunas variables de entorno en el archivo .env")
-
-# Validar que MONGO_DB sea una cadena de texto
-if not isinstance(MONGO_DB, str):
-    raise TypeError("MONGO_DB debe ser una cadena de texto")
-
-try:
-    # Crear conexión a MongoDB
-    client = MongoClient(MONGO_URI)
-
-    # Acceder a la base de datos y colección
-    db = client[MONGO_DB]  # Esto debe ser una cadena (str)
-    collection = db[MONGO_COLLECTION]
-
-    print("Conexión exitosa a MongoDB")
-
-except Exception as e:
-    print(f"Error de conexión a MongoDB: {e}")
+# Acceder a la base de datos y colección
+db = client[MONGO_DB]
+collection = db[MONGO_COLLECTION]
