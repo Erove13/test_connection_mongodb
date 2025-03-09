@@ -1,35 +1,45 @@
 import streamlit as st
 import pandas as pd
-from config import collection  # Importamos solo la colección
+import pickle
+import pymongo
+import os
+from dotenv import load_dotenv
 
-# Función para obtener los datos
-def get_data():
-    data = list(collection.find({}, {"_id": 0}))
-    return pd.DataFrame(data)
+# Cargar variables de entorno
+load_dotenv()
+MONGO_URI = os.getenv("MONGO_URI")
+DB_NAME = os.getenv("MONGO_DB")
+COLLECTION_NAME = "lego_final_venta"
 
-# Función para obtener los temas (Theme)
-def get_themes():
-    themes = collection.distinct("theme")  # Obtener temas únicos
-    return themes
+# Conectar a MongoDB
+@st.cache_data
+def load_data():
+    client = pymongo.MongoClient(MONGO_URI)
+    db = client[DB_NAME]
+    collection = db[COLLECTION_NAME]
+    data = pd.DataFrame(list(collection.find()))
+    return data
 
-# Interfaz en Streamlit
-st.title("📊 Visualización de MongoDB en Streamlit")
+# Cargar el modelo de recomendación
+@st.cache_resource
+def load_model():
+    with open("recommender.pkl", "rb") as file:
+        model = pickle.load(file)
+    return model
 
-# Obtener todos los temas
-themes = get_themes()
+df = load_data()
+model = load_model()
 
-# Crear un selectbox para elegir un tema
-selected_theme = st.selectbox("Selecciona un tema de LEGO", themes)
+st.title("Sistema de Recomendación")
 
-# Si el usuario ha seleccionado un tema
-if selected_theme:
-    # Filtrar los datos por el tema seleccionado
-    df = get_data()
-    filtered_df = df[df["theme"] == selected_theme]
+# Mostrar los primeros registros de la base de datos
+st.write("Vista previa de la base de datos:")
+st.dataframe(df.head())
 
-    # Mostrar los detalles del set seleccionado
-    if not filtered_df.empty:
-        st.write(f"Detalles de los sets de LEGO para el tema: {selected_theme}")
-        st.dataframe(filtered_df)
-    else:
-        st.write(f"No se encontraron sets para el tema: {selected_theme}")
+# Seleccionar un elemento para obtener recomendaciones
+item = st.selectbox("Selecciona un ítem para recomendar:", df.iloc[:, 0])
+
+if st.button("Obtener Recomendaciones"):
+    recommendations = model.recommend(item)  # Esto depende de cómo funcione tu modelo
+    st.write("Recomendaciones:")
+    st.write(recommendations)
