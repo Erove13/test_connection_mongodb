@@ -21,7 +21,7 @@ def load_data():
 # Cargar el modelo de recomendación
 @st.cache_resource
 def load_model():
-    with open("recommender.pkl", "rb") as file:
+    with open("stacking_model.pkl", "rb") as file:
         model = pickle.load(file)
     return model
 
