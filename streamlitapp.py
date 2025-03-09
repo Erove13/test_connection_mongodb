@@ -2,22 +2,20 @@ import streamlit as st
 import pandas as pd
 import pickle
 import pymongo
-import os
-from dotenv import load_dotenv
 
-# Cargar variables de entorno
-load_dotenv()
-MONGO_URI = os.getenv("MONGO_URI")
-DB_NAME = os.getenv("MONGO_DB")
-COLLECTION_NAME = "lego_final_venta"
+# Conectar a MongoDB usando Streamlit Secrets
+@st.cache_resource
+def init_mongo_connection():
+    return pymongo.MongoClient(st.secrets["mongo"]["uri"])
 
-# Conectar a MongoDB
+mongo_client = init_mongo_connection()
+mongo_db = mongo_client[st.secrets["mongo"]["db"]]
+mongo_collection = mongo_db[st.secrets["mongo"]["collection"]]
+
+# Cargar la base de datos
 @st.cache_data
 def load_data():
-    client = pymongo.MongoClient(MONGO_URI)
-    db = client[DB_NAME]
-    collection = db[COLLECTION_NAME]
-    data = pd.DataFrame(list(collection.find()))
+    data = pd.DataFrame(list(mongo_collection.find()))
     return data
 
 # Cargar el modelo de recomendación
